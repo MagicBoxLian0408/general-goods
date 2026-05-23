@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: general-goods-local
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+  config:
+    import:
+      - file:services/general-goods/env/local.env[.properties]
+  grpc:
+    client:
+      channels:
+        creator:
+          address: ${CREATOR_SERVICE_URL}
+          negotiation-type: plaintext
+          keep-alive-time: 30s
+          keep-alive-timeout: 5s
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    listener:
+      ack-mode: record
+      missing-topics-fatal: false
+    consumer:
+      group-id: general-goods-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+        spring.json.trusted.packages: "kr.magicbox.generalgoods.adapter.in.kafka.event"
+        spring.json.type.mapping: creator-revoked:kr.magicbox.generalgoods.adapter.in.kafka.event.CreatorRevokedEvent
+    retry:
+      topic:
+        backoff:
+          multiplier: 2
+          delay: 1s
+        attempts: 5
+  datasource:
+    url: ${MYSQL_URL}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+server:
+  port: ${SERVER_PORT}
+
+inbox:
+  max-event-age-minutes: 5
