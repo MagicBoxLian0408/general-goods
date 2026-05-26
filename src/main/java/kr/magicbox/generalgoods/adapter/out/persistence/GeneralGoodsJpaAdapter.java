@@ -10,6 +10,7 @@ import kr.magicbox.generalgoods.domain.vo.CreatorId;
 import kr.magicbox.generalgoods.domain.vo.GeneralGoodsId;
 import kr.magicbox.generalgoods.domain.vo.GeneralGoodsMedia;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -64,5 +65,15 @@ public class GeneralGoodsJpaAdapter implements GeneralGoodsRepositoryPort {
         return generalGoodsJpaRepository.findByIdAndIsDeletedFalse(id.value())
                 .map(generalGoodsMapper::toDomain)
                 .orElseThrow(GeneralGoodsNotFoundException::new);
+    }
+
+    @Override
+    public List<GeneralGoods> findAllByCursor(Long cursorId, int size) {
+        List<GeneralGoodsEntity> entities = cursorId == null
+                ? generalGoodsJpaRepository.findAllByIsDeletedFalseOrderByIdDesc(PageRequest.of(0, size))
+                : generalGoodsJpaRepository.findByIdLessThanAndIsDeletedFalseOrderByIdDesc(cursorId, PageRequest.of(0, size));
+        return entities.stream()
+                .map(generalGoodsMapper::toDomain)
+                .toList();
     }
 }
