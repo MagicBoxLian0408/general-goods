@@ -4,6 +4,8 @@ import kr.magicbox.generalgoods.domain.aggregate.GeneralGoods;
 import kr.magicbox.generalgoods.domain.vo.CreatorId;
 import kr.magicbox.generalgoods.domain.vo.GeneralGoodsId;
 
+import java.util.List;
+
 public interface GeneralGoodsRepositoryPort {
     void save(GeneralGoods generalGoods);
 
@@ -12,4 +14,6 @@ public interface GeneralGoodsRepositoryPort {
     void softDeleteByCreatorId(CreatorId creatorId);
 
     GeneralGoods findById(GeneralGoodsId id);
+
+    List<GeneralGoods> findAllByCursor(Long cursorId, int size);
 }
