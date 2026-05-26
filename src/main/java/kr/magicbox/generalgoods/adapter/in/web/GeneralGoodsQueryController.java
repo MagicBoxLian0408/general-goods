@@ -35,7 +35,7 @@ public class GeneralGoodsQueryController {
     public ResponseEntity<CursorResponse<GeneralGoodsResponse>> getAllGeneralGoods(
             @RequestParam(required = false) Long cursor,
             @RequestParam(defaultValue = CursorConstants.DEFAULT_SIZE) @CursorSize Integer size) {
-        List<GeneralGoodsResponse> contents = getAllGeneralGoodsUseCase.getAllGeneralGoods(GetAllGeneralGoodsQuery.of(cursor, size + 1))
+        List<GeneralGoodsResponse> contents = getAllGeneralGoodsUseCase.getAllGeneralGoods(GetAllGeneralGoodsQuery.of(cursor, size))
                 .stream()
                 .map(GeneralGoodsResponse::from)
                 .toList();
