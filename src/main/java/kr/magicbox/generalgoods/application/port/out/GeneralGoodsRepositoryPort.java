@@ -7,7 +7,7 @@ import kr.magicbox.generalgoods.domain.vo.GeneralGoodsId;
 import java.util.List;
 
 public interface GeneralGoodsRepositoryPort {
-    void save(GeneralGoods generalGoods);
+    Long save(GeneralGoods generalGoods);
 
     void update(GeneralGoods generalGoods);
 

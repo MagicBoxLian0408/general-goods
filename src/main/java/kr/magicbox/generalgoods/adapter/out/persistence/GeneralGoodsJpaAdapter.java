@@ -24,8 +24,9 @@ public class GeneralGoodsJpaAdapter implements GeneralGoodsRepositoryPort {
     private final GeneralGoodsMapper generalGoodsMapper;
 
     @Override
-    public void save(GeneralGoods generalGoods) {
-        generalGoodsJpaRepository.save(generalGoodsMapper.toEntity(generalGoods));
+    public Long save(GeneralGoods generalGoods) {
+        GeneralGoodsEntity entity = generalGoodsJpaRepository.save(generalGoodsMapper.toEntity(generalGoods));
+        return entity.getId();
     }
 
     @Override
