@@ -38,7 +38,7 @@ public class GeneralGoods {
         this.description = description;
         this.level = level;
         this.categories = categories;
-        this.generalGoodsMediaList = generalGoodsMediaList;
+        this.generalGoodsMediaList = List.copyOf(generalGoodsMediaList);
         this.isDeleted = false;
     }
 
@@ -55,7 +55,7 @@ public class GeneralGoods {
         this.description = description;
         this.level = level;
         this.categories = categories;
-        this.generalGoodsMediaList = generalGoodsMediaList;
+        this.generalGoodsMediaList = List.copyOf(generalGoodsMediaList);
         this.isDeleted = isDeleted;
     }
 
@@ -103,7 +103,7 @@ public class GeneralGoods {
         if (categories != null && !categories.isEmpty()) this.categories = categories;
         if (mediaList != null && !mediaList.isEmpty()) {
             validateMediaSortOrder(mediaList);
-            this.generalGoodsMediaList = mediaList;
+            this.generalGoodsMediaList = List.copyOf(mediaList);
         }
     }
 }
