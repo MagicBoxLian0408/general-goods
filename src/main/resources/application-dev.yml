@@ -41,11 +41,6 @@ spring:
       ddl-auto: update
     open-in-view: false
 
-security:
-  trusted:
-    ips:
-      - ${TRUSTED_IP_GATEWAY}
-
 inbox:
   max-event-age-minutes: 5
 
