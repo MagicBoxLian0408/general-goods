@@ -31,8 +31,9 @@ public class IdempotentAspect {
     @Around("@annotation(kr.magicbox.generalgoods.adapter.in.kafka.annotation.Idempotent)")
     public Object around(ProceedingJoinPoint pjp) {
         ConsumerRecord<String, ?> consumerRecord = extractRecord(pjp);
+        
         InboxEvent event = (InboxEvent) consumerRecord.value();
-        Long eventId = event.eventId();
+        Long eventId = Long.parseLong(consumerRecord.key());
         Instant occurredAt = event.occurredAt();
 
         if (isTooOld(occurredAt)) {
@@ -65,14 +66,9 @@ public class IdempotentAspect {
                     .build());
             try {
                 pjp.proceed();
-            } catch (Error e) {
-                throw e;
-            } catch (RuntimeException e) {
-                status.setRollbackOnly();
-                throw e;
             } catch (Throwable e) {
                 status.setRollbackOnly();
-                throw new IllegalStateException(e);
+                throw new RuntimeException(e);
             }
             inbox.markProcessed();
             return null;
