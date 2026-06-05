@@ -9,6 +9,7 @@ import java.time.Instant;
 
 @Builder
 public record CreatorRevokedEvent(
+        @JsonProperty("event_id") Long eventId,
         @JsonProperty("creator_id") CreatorId creatorId,
         @JsonProperty("occurred_at") @JsonAlias("revoked_at") Instant occurredAt
 ) implements InboxEvent {

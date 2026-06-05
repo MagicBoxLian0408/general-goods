@@ -29,7 +29,7 @@ public class GeneralGoods {
     @Builder(builderMethodName = "createBuilder", builderClassName = "CreateBuilder")
     public GeneralGoods(CreatorId creatorId, String name, Long price, Long stock, String description, GeneralGoodsLevel level,
                         Set<MagicGenre> categories, List<GeneralGoodsMedia> generalGoodsMediaList) {
-        validateCreate(creatorId, name, price, stock, categories, generalGoodsMediaList);
+        validateCreate(creatorId, name, price, stock, level, categories, generalGoodsMediaList);
         this.id = null;
         this.creatorId = creatorId;
         this.name = name;
@@ -38,7 +38,7 @@ public class GeneralGoods {
         this.description = description;
         this.level = level;
         this.categories = categories;
-        this.generalGoodsMediaList = List.copyOf(generalGoodsMediaList);
+        this.generalGoodsMediaList = generalGoodsMediaList;
         this.isDeleted = false;
     }
 
@@ -55,7 +55,7 @@ public class GeneralGoods {
         this.description = description;
         this.level = level;
         this.categories = categories;
-        this.generalGoodsMediaList = List.copyOf(generalGoodsMediaList);
+        this.generalGoodsMediaList = generalGoodsMediaList;
         this.isDeleted = isDeleted;
     }
 
@@ -64,11 +64,12 @@ public class GeneralGoods {
     }
 
     private void validateCreate(CreatorId creatorId, String name, Long price, Long stock,
-                               Set<MagicGenre> categories, List<GeneralGoodsMedia> generalGoodsMediaList) {
+                               GeneralGoodsLevel level, Set<MagicGenre> categories, List<GeneralGoodsMedia> generalGoodsMediaList) {
         if (creatorId == null) throw new InvalidFieldException("크리에이터 ID는 필수입니다.");
         if (name == null || name.isEmpty()) throw new InvalidFieldException("이름은 필수입니다.");
         if (price == null || price <= 0) throw new InvalidFieldException("가격은 양수여야 합니다.");
         if (stock == null || stock <= 0) throw new InvalidFieldException("재고는 양수여야 합니다.");
+        if (level == null) throw new InvalidFieldException("레벨은 필수입니다.");
         if (categories == null || categories.isEmpty()) throw new InvalidFieldException("카테고리는 하나 이상 필수입니다.");
         if (generalGoodsMediaList == null || generalGoodsMediaList.isEmpty()) throw new InvalidFieldException("미디어는 하나 이상 필수입니다.");
         validateMediaSortOrder(generalGoodsMediaList);
@@ -103,7 +104,7 @@ public class GeneralGoods {
         if (categories != null && !categories.isEmpty()) this.categories = categories;
         if (mediaList != null && !mediaList.isEmpty()) {
             validateMediaSortOrder(mediaList);
-            this.generalGoodsMediaList = List.copyOf(mediaList);
+            this.generalGoodsMediaList = mediaList;
         }
     }
 }
