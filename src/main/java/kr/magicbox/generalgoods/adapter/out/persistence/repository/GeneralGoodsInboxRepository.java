@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface GeneralGoodsInboxRepository extends JpaRepository<GeneralGoodsInboxEntity, Long> {
 
-    boolean existsByEventId(Long eventId);
+    boolean existsByKafkaKey(String kafkaKey);
 
     Optional<GeneralGoodsInboxEntity> findByTopicAndPartitionAndOffset(String topic, Integer partition, Long offset);
 }

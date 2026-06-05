@@ -15,7 +15,7 @@ import java.time.Instant;
 public class GeneralGoodsInboxEntity extends BaseEntity {
 
     @Column(nullable = false, unique = true)
-    private Long eventId;
+    private String kafkaKey;
 
     @Column(nullable = false)
     private String topic;
@@ -34,8 +34,8 @@ public class GeneralGoodsInboxEntity extends BaseEntity {
     private Instant occurredAt;
 
     @Builder
-    public GeneralGoodsInboxEntity(Long eventId, String topic, Integer partition, Long offset, GeneralGoodsInboxStatus status, Instant occurredAt) {
-        this.eventId = eventId;
+    public GeneralGoodsInboxEntity(String kafkaKey, String topic, Integer partition, Long offset, GeneralGoodsInboxStatus status, Instant occurredAt) {
+        this.kafkaKey = kafkaKey;
         this.topic = topic;
         this.partition = partition;
         this.offset = offset;
