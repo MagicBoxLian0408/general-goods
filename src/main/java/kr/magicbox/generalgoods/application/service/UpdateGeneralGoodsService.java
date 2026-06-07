@@ -8,7 +8,6 @@ import kr.magicbox.generalgoods.application.port.out.GeneralGoodsOutboxPort;
 import kr.magicbox.generalgoods.application.port.out.GeneralGoodsRepositoryPort;
 import kr.magicbox.generalgoods.domain.aggregate.GeneralGoods;
 import kr.magicbox.generalgoods.domain.event.GeneralGoodsUpdatedEvent;
-import kr.magicbox.generalgoods.domain.event.GeneralGoodsUpdatedEvent.GoodsSnapshot;
 import kr.magicbox.generalgoods.domain.exception.GeneralGoodsUnauthorizedException;
 import kr.magicbox.generalgoods.domain.vo.CreatorId;
 import kr.magicbox.generalgoods.domain.vo.GeneralGoodsMedia;
@@ -37,8 +36,11 @@ public class UpdateGeneralGoodsService implements UpdateGeneralGoodsUseCase {
             throw new GeneralGoodsUnauthorizedException();
         }
 
-        GoodsSnapshot before = new GoodsSnapshot(
+        GeneralGoodsUpdatedEvent.GoodsSnapshot before = new GeneralGoodsUpdatedEvent.GoodsSnapshot(
                 generalGoods.getName(),
+                generalGoods.getDescription(),
+                generalGoods.getLevel(),
+                generalGoods.getCategories(),
                 generalGoods.getPrice(),
                 generalGoods.getStock(),
                 generalGoods.getGeneralGoodsMediaList().stream().map(GeneralGoodsMedia::getMediaUrl).toList()
@@ -49,18 +51,20 @@ public class UpdateGeneralGoodsService implements UpdateGeneralGoodsUseCase {
                 .orElse(null);
 
         generalGoods.update(command.name(), command.price(), command.stock(), command.description(), command.level(), command.categories(), mediaList);
-
         generalGoodsRepositoryPort.update(generalGoods);
 
-        GoodsSnapshot after = new GoodsSnapshot(
+        GeneralGoodsUpdatedEvent.GoodsSnapshot after = new GeneralGoodsUpdatedEvent.GoodsSnapshot(
                 generalGoods.getName(),
+                generalGoods.getDescription(),
+                generalGoods.getLevel(),
+                generalGoods.getCategories(),
                 generalGoods.getPrice(),
                 generalGoods.getStock(),
                 generalGoods.getGeneralGoodsMediaList().stream().map(GeneralGoodsMedia::getMediaUrl).toList()
         );
 
         generalGoodsOutboxPort.save(GeneralGoodsUpdatedEvent.builder()
-                .generalGoodsId(command.id().value())
+                .generalGoodsId(generalGoods.getId().value())
                 .creatorId(creatorId.value())
                 .before(before)
                 .after(after)

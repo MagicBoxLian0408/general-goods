@@ -5,7 +5,6 @@ import kr.magicbox.generalgoods.application.dto.command.UpdateGeneralGoodsComman
 import kr.magicbox.generalgoods.domain.enums.GeneralGoodsLevel;
 import kr.magicbox.generalgoods.domain.enums.MagicGenre;
 import kr.magicbox.generalgoods.domain.vo.GeneralGoodsId;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import kr.magicbox.generalgoods.domain.vo.UserId;
 import lombok.Builder;
@@ -21,7 +20,7 @@ public record UpdateGeneralGoodsRequest(
         String description,
         GeneralGoodsLevel level,
         Set<MagicGenre> categories,
-        List<@Valid MediaRequest> mediaList
+        List<MediaRequest> mediaList
 ) {
     public UpdateGeneralGoodsCommand toCommand(Long id, UserId userId) {
         List<MediaCommand> mediaCommands = mediaList == null ? null : mediaList.stream()

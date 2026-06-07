@@ -1,10 +1,13 @@
 package kr.magicbox.generalgoods.domain.event;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import kr.magicbox.generalgoods.domain.enums.GeneralGoodsLevel;
+import kr.magicbox.generalgoods.domain.enums.MagicGenre;
 import lombok.Builder;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 
 @Builder
 public record GeneralGoodsUpdatedEvent(
@@ -17,6 +20,9 @@ public record GeneralGoodsUpdatedEvent(
 
     public record GoodsSnapshot(
             @JsonProperty("name") String name,
+            @JsonProperty("description") String description,
+            @JsonProperty("level") GeneralGoodsLevel level,
+            @JsonProperty("categories") Set<MagicGenre> categories,
             @JsonProperty("price") Long price,
             @JsonProperty("stock") Long stock,
             @JsonProperty("media_urls") List<String> mediaUrls

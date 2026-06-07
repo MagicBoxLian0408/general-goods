@@ -2,8 +2,8 @@ package kr.magicbox.generalgoods.adapter.in.kafka;
 
 import kr.magicbox.generalgoods.adapter.in.kafka.annotation.Idempotent;
 import kr.magicbox.generalgoods.adapter.in.kafka.event.CreatorRevokedEvent;
-import kr.magicbox.generalgoods.application.dto.command.HandleCreatorRevokedCommand;
 import kr.magicbox.generalgoods.adapter.out.persistence.repository.GeneralGoodsInboxRepository;
+import kr.magicbox.generalgoods.application.dto.command.HandleCreatorRevokedCommand;
 import kr.magicbox.generalgoods.application.port.in.HandleCreatorRevokedUseCase;
 import kr.magicbox.generalgoods.global.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +22,7 @@ public class CreatorEventKafkaListener {
     private final HandleCreatorRevokedUseCase handleCreatorRevokedUseCase;
     private final GeneralGoodsInboxRepository generalGoodsInboxRepository;
 
+    @Idempotent
     @RetryableTopic(dltStrategy = DltStrategy.FAIL_ON_ERROR, dltTopicSuffix = "-dlt", exclude = {BusinessException.class})
     @KafkaListener(topics = "outbox.event.creator-revoked", groupId = "general-goods-service")
     public void handleCreatorRevokedEvent(ConsumerRecord<String, CreatorRevokedEvent> consumerRecord) {

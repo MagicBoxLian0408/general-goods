@@ -39,22 +39,27 @@ public class RegisterGeneralGoodsService implements RegisterGeneralGoodsUseCase 
                 .price(command.price())
                 .stock(command.stock())
                 .description(command.description())
+                .level(command.level())
                 .categories(command.categories())
                 .generalGoodsMediaList(mediaList)
                 .build();
 
-        Long savedId = generalGoodsRepositoryPort.save(generalGoods);
+        Long generalGoodsId = generalGoodsRepositoryPort.save(generalGoods);
 
         List<String> mediaUrls = mediaList.stream()
                 .map(GeneralGoodsMedia::getMediaUrl)
                 .toList();
 
         generalGoodsOutboxPort.save(GeneralGoodsCreatedEvent.builder()
-                .generalGoodsId(savedId)
+                .generalGoodsId(generalGoodsId)
                 .creatorId(creatorId.value())
                 .name(command.name())
+                .description(command.description())
+                .level(command.level())
+                .categories(command.categories())
                 .price(command.price())
                 .stock(command.stock())
+                .isDeleted(false)
                 .mediaUrls(mediaUrls)
                 .occurredAt(Instant.now())
                 .build());

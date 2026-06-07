@@ -41,6 +41,7 @@ spring:
       ddl-auto: update
     open-in-view: false
 
+
 inbox:
   max-event-age-minutes: 5
 
