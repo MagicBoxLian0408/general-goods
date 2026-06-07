@@ -51,6 +51,9 @@ dependencyManagement {
         mavenBom "org.springframework.grpc:spring-grpc-dependencies:$springGrpcVersion"
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion"
     }
+    dependencies {
+        dependency 'com.google.protobuf:protobuf-java:4.34.0'
+    }
 }
 
 // protobuf 설정
