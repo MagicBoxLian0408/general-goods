@@ -31,7 +31,9 @@ public class IdempotentAspect {
     @Around("@annotation(kr.magicbox.generalgoods.adapter.in.kafka.annotation.Idempotent)")
     public Object around(ProceedingJoinPoint pjp) {
         ConsumerRecord<String, ?> consumerRecord = extractRecord(pjp);
-        String key = consumerRecord.key();
+        String key = consumerRecord.key() != null
+                ? consumerRecord.key()
+                : consumerRecord.topic() + "-" + consumerRecord.partition() + "-" + consumerRecord.offset();
         InboxEvent event = (InboxEvent) consumerRecord.value();
         Instant occurredAt = event.occurredAt();
 
