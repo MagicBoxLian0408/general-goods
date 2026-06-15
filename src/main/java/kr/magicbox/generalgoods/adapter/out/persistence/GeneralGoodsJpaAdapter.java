@@ -76,7 +76,7 @@ public class GeneralGoodsJpaAdapter implements GeneralGoodsRepositoryPort {
     }
 
     @Override
-    public boolean decreaseStock(Long id, int quantity) {
-        return generalGoodsJpaRepository.decreaseStock(id, quantity) > 0;
+    public boolean decreaseStock(Long productId, long quantity) {
+        return generalGoodsJpaRepository.decreaseStock(productId, quantity) > 0;
     }
 }

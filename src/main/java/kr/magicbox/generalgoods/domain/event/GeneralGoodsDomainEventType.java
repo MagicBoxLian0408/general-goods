@@ -10,8 +10,8 @@ public enum GeneralGoodsDomainEventType {
     GENERAL_GOODS_CREATED("general-goods-created"),
     GENERAL_GOODS_UPDATED("general-goods-updated"),
     GENERAL_GOODS_DELETED("general-goods-deleted"),
-    STOCK_RESERVE_SUCCEEDED("stock-reserve-succeeded"),
-    STOCK_RESERVE_FAILED("stock-reserve-failed");
+    STOCK_RESERVE_SUCCEEDED("stock-reserve-general-goods-succeeded"),
+    STOCK_RESERVE_FAILED("stock-reserve-general-goods-failed");
 
     private final String value;
 }
