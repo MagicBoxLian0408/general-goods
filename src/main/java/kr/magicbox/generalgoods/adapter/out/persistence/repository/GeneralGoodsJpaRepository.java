@@ -26,4 +26,8 @@ public interface GeneralGoodsJpaRepository extends JpaRepository<GeneralGoodsEnt
     @Modifying
     @Query("UPDATE GeneralGoodsEntity g SET g.isDeleted = true WHERE g.creatorId = :creatorId AND g.isDeleted = false")
     void softDeleteByCreatorId(@Param("creatorId") Long creatorId);
+
+    @Modifying
+    @Query("UPDATE GeneralGoodsEntity g SET g.stock = g.stock - :quantity WHERE g.id = :id AND g.stock >= :quantity AND g.isDeleted = false")
+    int decreaseStock(@Param("id") Long id, @Param("quantity") int quantity);
 }
