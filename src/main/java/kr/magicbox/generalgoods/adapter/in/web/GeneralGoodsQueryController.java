@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@RequestMapping("/general-goods")
 @RequiredArgsConstructor
 @Validated
 public class GeneralGoodsQueryController {

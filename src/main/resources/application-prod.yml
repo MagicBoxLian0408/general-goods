@@ -27,6 +27,8 @@ spring:
         spring.json.type.mapping: >
           creator-revoked:kr.magicbox.generalgoods.adapter.in.kafka.event.CreatorRevokedEvent,
           stock-reserve.general-good:kr.magicbox.generalgoods.adapter.in.kafka.event.StockReserveCommandEvent
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     retry:
       topic:
         backoff:
