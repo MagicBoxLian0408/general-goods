@@ -28,7 +28,7 @@ spring:
         spring.json.use.type.headers: false
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       topic:
         backoff:
           multiplier: 2
