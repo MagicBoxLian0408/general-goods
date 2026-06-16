@@ -26,4 +26,5 @@ public class OrchestratorCommandKafkaListener {
         log.info("[Inbox] stock-reserve.general-good 커맨드 수신. key={}", consumerRecord.key());
         handleStockReserveUseCase.handleStockReserve(consumerRecord.value());
     }
+
 }
