@@ -39,6 +39,7 @@ public class GeneralGoodsEntity extends BaseEntity {
 
     @ElementCollection
     @CollectionTable(name = "general_goods_category", joinColumns = @JoinColumn(name = "general_goods_id"))
+    @Enumerated(EnumType.STRING)
     @Column(name = "category")
     private Set<MagicGenre> categories;
 
@@ -47,9 +48,6 @@ public class GeneralGoodsEntity extends BaseEntity {
 
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted = false;
-
-    @Version
-    private Integer version;
 
     @Builder
     public GeneralGoodsEntity(Long creatorId, String name, Long price, Long stock, String description, GeneralGoodsLevel level, Set<MagicGenre> categories) {
