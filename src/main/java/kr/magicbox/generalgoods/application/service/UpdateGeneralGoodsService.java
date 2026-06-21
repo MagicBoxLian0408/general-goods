@@ -31,7 +31,7 @@ public class UpdateGeneralGoodsService implements UpdateGeneralGoodsUseCase {
     public void updateGeneralGoods(UpdateGeneralGoodsCommand command) {
         GeneralGoods generalGoods = generalGoodsRepositoryPort.findById(command.id());
 
-        CreatorId creatorId = creatorIdQueryPort.getCreatorId(command.userId());
+        CreatorId creatorId = creatorIdQueryPort.getCreatorId(command.userId()).join();
         if (!generalGoods.getCreatorId().equals(creatorId)) {
             throw new GeneralGoodsUnauthorizedException();
         }

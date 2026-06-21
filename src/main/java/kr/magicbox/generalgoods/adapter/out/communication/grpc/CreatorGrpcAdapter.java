@@ -1,6 +1,11 @@
 package kr.magicbox.generalgoods.adapter.out.communication.grpc;
 
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.MoreExecutors;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import io.grpc.ManagedChannel;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
@@ -16,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.CompletableFuture;
 
 @Component
 @RequiredArgsConstructor
@@ -26,20 +31,33 @@ public class CreatorGrpcAdapter implements CreatorIdQueryPort {
 
     @Override
     @CircuitBreaker(name = "creatorService", fallbackMethod = "getCreatorIdFallback")
-    public CreatorId getCreatorId(UserId userId) {
+    @TimeLimiter(name = "creatorService", fallbackMethod = "getCreatorIdFallback")
+    public CompletableFuture<CreatorId> getCreatorId(UserId userId) {
         GetCreatorIdByUserIdRequest request = GetCreatorIdByUserIdRequest.newBuilder()
                 .setUserId(userId.value())
                 .build();
 
-        CreatorServiceGrpc.CreatorServiceBlockingStub stub = CreatorServiceGrpc.newBlockingStub(creatorManagedChannel)
-                .withDeadlineAfter(2, TimeUnit.SECONDS);
-        GetCreatorIdByUserIdResponse response = stub.getCreatorIdByUserId(request);
+        CreatorServiceGrpc.CreatorServiceFutureStub stub = CreatorServiceGrpc.newFutureStub(creatorManagedChannel);
+        ListenableFuture<GetCreatorIdByUserIdResponse> future = stub.getCreatorIdByUserId(request);
 
-        return new CreatorId(response.getCreatorId());
+        CompletableFuture<CreatorId> result = new CompletableFuture<>();
+        Futures.addCallback(future, new FutureCallback<GetCreatorIdByUserIdResponse>() {
+            @Override
+            public void onSuccess(GetCreatorIdByUserIdResponse response) {
+                result.complete(new CreatorId(response.getCreatorId()));
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                result.completeExceptionally(throwable);
+            }
+        }, MoreExecutors.directExecutor());
+
+        return result;
     }
 
     @SuppressWarnings("unused")
-    private CreatorId getCreatorIdFallback(UserId userId, Throwable throwable) {
+    private CompletableFuture<CreatorId> getCreatorIdFallback(UserId userId, Throwable throwable) {
         if (throwable instanceof StatusRuntimeException statusException
                 && statusException.getStatus().getCode() == Status.Code.NOT_FOUND) {
             throw new CreatorNotFoundException();

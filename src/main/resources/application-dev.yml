@@ -24,11 +24,7 @@ spring:
       properties:
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
         spring.json.trusted.packages: "kr.magicbox.generalgoods.adapter.in.kafka.event"
-        spring.json.type.mapping: >
-          creator-revoked:kr.magicbox.generalgoods.adapter.in.kafka.event.CreatorRevokedEvent,
-          stock-reserve.general-good:kr.magicbox.generalgoods.adapter.in.kafka.event.StockReserveCommandEvent
-    producer:
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+        spring.json.type.mapping: creator-revoked:kr.magicbox.generalgoods.adapter.in.kafka.event.CreatorRevokedEvent
     retry:
       topic:
         backoff:
@@ -45,6 +41,10 @@ spring:
       ddl-auto: update
     open-in-view: false
 
+security:
+  trusted:
+    ips:
+      - ${TRUSTED_IP_GATEWAY}
 
 inbox:
   max-event-age-minutes: 5
