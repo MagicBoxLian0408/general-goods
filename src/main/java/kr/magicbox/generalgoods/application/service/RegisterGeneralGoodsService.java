@@ -24,10 +24,10 @@ public class RegisterGeneralGoodsService implements RegisterGeneralGoodsUseCase 
     private final CreatorIdQueryPort creatorIdQueryPort;
     private final GeneralGoodsOutboxPort generalGoodsOutboxPort;
 
-    @Transactional
     @Override
+    @Transactional
     public void registerGeneralGoods(RegisterGeneralGoodsCommand command) {
-        CreatorId creatorId = creatorIdQueryPort.getCreatorId(command.userId());
+        CreatorId creatorId = creatorIdQueryPort.getCreatorId(command.userId()).join();
 
         List<GeneralGoodsMedia> mediaList = command.mediaList().stream()
                 .map(this::toGeneralGoodsMedia)

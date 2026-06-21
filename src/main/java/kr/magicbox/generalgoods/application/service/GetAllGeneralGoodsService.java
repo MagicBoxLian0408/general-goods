@@ -18,8 +18,8 @@ public class GetAllGeneralGoodsService implements GetAllGeneralGoodsUseCase {
 
     private final GeneralGoodsRepositoryPort generalGoodsRepositoryPort;
 
-    @Transactional(readOnly = true)
     @Override
+    @Transactional(readOnly = true)
     public List<GeneralGoodsResult> getAllGeneralGoods(GetAllGeneralGoodsQuery query) {
         return generalGoodsRepositoryPort.findAllByCursor(query.cursorId(), query.size() + 1)
                 .stream()

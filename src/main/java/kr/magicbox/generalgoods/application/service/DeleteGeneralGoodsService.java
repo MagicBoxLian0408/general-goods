@@ -17,12 +17,12 @@ public class DeleteGeneralGoodsService implements DeleteGeneralGoodsUseCase {
     private final GeneralGoodsRepositoryPort generalGoodsRepositoryPort;
     private final CreatorIdQueryPort creatorIdQueryPort;
 
-    @Transactional
     @Override
+    @Transactional
     public void deleteGeneralGoods(DeleteGeneralGoodsCommand command) {
         GeneralGoods generalGoods = generalGoodsRepositoryPort.findById(command.id());
 
-        CreatorId creatorId = creatorIdQueryPort.getCreatorId(command.userId());
+        CreatorId creatorId = creatorIdQueryPort.getCreatorId(command.userId()).join();
         if (!generalGoods.getCreatorId().equals(creatorId)) {
             throw new GeneralGoodsUnauthorizedException();
         }

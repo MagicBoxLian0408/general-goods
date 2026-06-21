@@ -15,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class GetGeneralGoodsService implements GetGeneralGoodsUseCase {
     private final GeneralGoodsRepositoryPort generalGoodsRepositoryPort;
 
-    @Transactional(readOnly = true)
     @Override
+    @Transactional(readOnly = true)
     public GeneralGoodsResult getGeneralGoods(GetGeneralGoodsQuery query) {
         GeneralGoods goods = generalGoodsRepositoryPort.findById(query.id());
 
