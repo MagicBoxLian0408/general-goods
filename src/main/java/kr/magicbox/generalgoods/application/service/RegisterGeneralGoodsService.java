@@ -27,7 +27,7 @@ public class RegisterGeneralGoodsService implements RegisterGeneralGoodsUseCase 
     @Transactional
     @Override
     public void registerGeneralGoods(RegisterGeneralGoodsCommand command) {
-        CreatorId creatorId = creatorIdQueryPort.getCreatorId(command.userId());
+        CreatorId creatorId = creatorIdQueryPort.getCreatorId(command.userId()).join();
 
         List<GeneralGoodsMedia> mediaList = command.mediaList().stream()
                 .map(this::toGeneralGoodsMedia)
