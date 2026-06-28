@@ -16,6 +16,4 @@ public interface GeneralGoodsRepositoryPort {
     GeneralGoods findById(GeneralGoodsId id);
 
     List<GeneralGoods> findAllByCursor(Long cursorId, int size);
-
-    boolean decreaseStock(Long id, int quantity);
 }

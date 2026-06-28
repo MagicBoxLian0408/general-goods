@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface GeneralGoodsInboxRepository extends JpaRepository<GeneralGoodsInboxEntity, Long> {
 
     boolean existsByKey(String key);
+
+    Optional<GeneralGoodsInboxEntity> findByTopicAndPartitionAndOffset(String topic, Integer partition, Long offset);
 }

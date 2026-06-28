@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/general-good")
 @RequiredArgsConstructor
 @Validated
 public class GeneralGoodsCommandController {
